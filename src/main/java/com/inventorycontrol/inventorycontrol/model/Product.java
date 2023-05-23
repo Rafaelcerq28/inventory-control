@@ -13,7 +13,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="product")
@@ -27,14 +29,19 @@ public class Product {
     private long id;
 
     @Column(nullable = false)
+    @Size(min = 2)
     private String name;
     
+    @Size(min = 5)
     private String description;
     
+    @Size(min = 5)
     private String brand;
     
+
     private int maxQuantity;
     
+    @Min(0)
     private int minQuantity;
     
     @Column(nullable = false)

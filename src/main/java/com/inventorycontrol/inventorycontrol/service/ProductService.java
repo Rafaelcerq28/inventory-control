@@ -97,17 +97,6 @@ public class ProductService {
         "weight": 2.5
         }
         */
-
-        /* 
-        return cursoRepository.findById(id).map(cursoParaAtualizar -> {
-            cursoParaAtualizar.setNome(curso.getNome());
-            cursoParaAtualizar.setPessoaInstrutora(curso.getPessoaInstrutora());
-            cursoParaAtualizar.setPreco(curso.getPreco());
-
-            Curso updatedCurso = cursoRepository.save(cursoParaAtualizar);
-            return ResponseEntity.ok().body(updatedCurso); 
-        }).orElse(ResponseEntity.notFound().build()); 
-        */
         
         return ResponseEntity.ok().body(updatedProduct);
     }
