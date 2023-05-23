@@ -62,4 +62,54 @@ public class ProductService {
         return entityModel;
     }
 
+    public ResponseEntity<Object> deleteProduct(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        
+        if(product.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+
+        productRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    public ResponseEntity<Product> updateProduct(Product product, Long id) {
+        Optional<Product> productToUpdate = productRepository.findById(id);
+        productToUpdate.get().setName(product.getName());
+        productToUpdate.get().setDescription(product.getDescription());
+        productToUpdate.get().setBrand(product.getBrand());
+        productToUpdate.get().setMaxQuantity(product.getMaxQuantity());
+        productToUpdate.get().setMinQuantity(product.getMinQuantity());
+        productToUpdate.get().setQuantity(product.getQuantity());
+        productToUpdate.get().setWeight(product.getWeight());
+
+        Product updatedProduct = productRepository.save(productToUpdate.get());
+
+        /*
+        {
+        "name": "Product X",
+        "description": "This is a fantastic product",
+        "brand": "ABC Corporation",
+        "maxQuantity": 100,
+        "minQuantity": 10,
+        "quantity": 50,
+        "weight": 2.5
+        }
+        */
+
+        /* 
+        return cursoRepository.findById(id).map(cursoParaAtualizar -> {
+            cursoParaAtualizar.setNome(curso.getNome());
+            cursoParaAtualizar.setPessoaInstrutora(curso.getPessoaInstrutora());
+            cursoParaAtualizar.setPreco(curso.getPreco());
+
+            Curso updatedCurso = cursoRepository.save(cursoParaAtualizar);
+            return ResponseEntity.ok().body(updatedCurso); 
+        }).orElse(ResponseEntity.notFound().build()); 
+        */
+        
+        return ResponseEntity.ok().body(updatedProduct);
+    }
+
 }

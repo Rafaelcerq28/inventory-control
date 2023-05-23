@@ -1,11 +1,19 @@
 package com.inventorycontrol.inventorycontrol.model;
 
+import java.time.Instant;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name="product")
@@ -34,6 +42,14 @@ public class Product {
     
     private double weight;
     //inventory movement(criar depois)
+
+    @PastOrPresent
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    @JsonIgnore
+    private Instant updatedAt;
     //createdat
     //updatedat
      
