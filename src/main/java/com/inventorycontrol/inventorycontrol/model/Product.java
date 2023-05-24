@@ -1,6 +1,7 @@
 package com.inventorycontrol.inventorycontrol.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
@@ -48,7 +50,10 @@ public class Product {
     private int quantity;
     
     private double weight;
-    //inventory movement(criar depois)
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<InventoryMovement> inventoryMovements;
 
     @PastOrPresent
     @CreationTimestamp
@@ -57,8 +62,6 @@ public class Product {
     @UpdateTimestamp
     @JsonIgnore
     private Instant updatedAt;
-    //createdat
-    //updatedat
      
     public long getId() {
         return id;

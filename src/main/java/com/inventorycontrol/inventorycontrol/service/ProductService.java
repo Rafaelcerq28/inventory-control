@@ -3,6 +3,7 @@ package com.inventorycontrol.inventorycontrol.service;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,16 +15,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.inventorycontrol.inventorycontrol.Exception.UserNotFoundException;
 import com.inventorycontrol.inventorycontrol.controller.ProductController;
+import com.inventorycontrol.inventorycontrol.model.InventoryMovement;
 import com.inventorycontrol.inventorycontrol.model.Product;
+import com.inventorycontrol.inventorycontrol.repository.InventoryMovementRepository;
 import com.inventorycontrol.inventorycontrol.repository.ProductRepository;
 
 @Service
 public class ProductService {
     
     private ProductRepository productRepository;
+    private InventoryMovementRepository inventoryMovementRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, InventoryMovementRepository inventoryMovementRepository) {
         this.productRepository = productRepository;
+        this.inventoryMovementRepository = inventoryMovementRepository;
     }
 
     public ResponseEntity<Product> createProduct(Product product){
@@ -56,9 +61,6 @@ public class ProductService {
         //WebMvcLinkBuilder link2 = linkTo(methodOn(ProductController.class).findProduct(id));
         //entityModel.add(link2.withRel("one-product"));
 
-        /*todo:
-         * colocar link de metodos para adicionar ou remover quantidade de produtos 
-        */
         return entityModel;
     }
 
@@ -76,6 +78,11 @@ public class ProductService {
 
     public ResponseEntity<Product> updateProduct(Product product, Long id) {
         Optional<Product> productToUpdate = productRepository.findById(id);
+        
+        if(productToUpdate.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+
         productToUpdate.get().setName(product.getName());
         productToUpdate.get().setDescription(product.getDescription());
         productToUpdate.get().setBrand(product.getBrand());
@@ -100,5 +107,28 @@ public class ProductService {
         
         return ResponseEntity.ok().body(updatedProduct);
     }
+
+    public ResponseEntity<Product> increaseProductStock(Long id, int quantity) {
+        Optional<Product> productToUpdate = productRepository.findById(id);
+
+        if(productToUpdate.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+        
+        productToUpdate.get().setQuantity(productToUpdate.get().getQuantity() + quantity);
+
+        Product updatedProduct = productRepository.save(productToUpdate.get());
+        
+        //updating product's movement
+        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),quantity,updatedProduct);
+        inventoryMovementRepository.save(inventoryMovement);
+
+        return ResponseEntity.ok().body(updatedProduct);
+    }
+
+/*
+ * TODO
+ * metodos para listar a movimentacao do produto
+ */
 
 }

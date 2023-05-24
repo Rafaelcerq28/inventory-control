@@ -57,4 +57,11 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable(value = "id") Long id, @RequestBody Product product){
         return productService.updateProduct(product,id);
     }
+
+    //increasing inventory
+    @PutMapping("/product/{id}/increase-stock/{quantity}")
+    public ResponseEntity<Product> increaseProductStock(@PathVariable(value = "id") Long id, @PathVariable(value = "quantity") int quantity){
+        return productService.increaseProductStock(id,quantity);
+    }
+
 }
