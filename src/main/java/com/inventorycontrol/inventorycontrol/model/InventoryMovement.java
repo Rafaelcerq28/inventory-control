@@ -13,10 +13,15 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class InventoryMovement {
-        
-    public InventoryMovement(LocalDateTime dateTime, int quantity, Product product) {
+    
+
+    public InventoryMovement() {
+    }
+    
+    public InventoryMovement(LocalDateTime dateTime, int quantity,MovementType movementType, Product product) {
         this.dateTime = dateTime;
         this.quantity = quantity;
+        this.movementType = movementType;
         this.product = product;
     }
     @Id
@@ -27,6 +32,8 @@ public class InventoryMovement {
     
     private int quantity;
     
+    private MovementType movementType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Product product;
@@ -55,6 +62,13 @@ public class InventoryMovement {
     public void setProduct(Product product) {
         this.product = product;
     }
+    public MovementType getMovementType() {
+        return movementType;
+    }
+    public void setMovementType(MovementType movementType) {
+        this.movementType = movementType;
+    }
 
+    
     
 }

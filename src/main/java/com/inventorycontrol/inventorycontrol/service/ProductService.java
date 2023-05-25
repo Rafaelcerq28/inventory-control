@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.inventorycontrol.inventorycontrol.Exception.UserNotFoundException;
 import com.inventorycontrol.inventorycontrol.controller.ProductController;
 import com.inventorycontrol.inventorycontrol.model.InventoryMovement;
+import com.inventorycontrol.inventorycontrol.model.MovementType;
 import com.inventorycontrol.inventorycontrol.model.Product;
 import com.inventorycontrol.inventorycontrol.repository.InventoryMovementRepository;
 import com.inventorycontrol.inventorycontrol.repository.ProductRepository;
@@ -39,6 +40,11 @@ public class ProductService {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().
         path("/{id}").buildAndExpand(savedProduct.getId()).toUri();
 
+        //When the product is created the system add the first inventory movement
+        MovementType movementType = MovementType.IN;
+        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),savedProduct.getQuantity(),movementType,savedProduct);
+        inventoryMovementRepository.save(inventoryMovement);
+
         return ResponseEntity.created(location).body(savedProduct);
     }
 
@@ -60,6 +66,9 @@ public class ProductService {
         //Test
         //WebMvcLinkBuilder link2 = linkTo(methodOn(ProductController.class).findProduct(id));
         //entityModel.add(link2.withRel("one-product"));
+        //Test2
+        WebMvcLinkBuilder link2 = linkTo(methodOn(ProductController.class).findAllInventoryMovements(id));
+        entityModel.add(link2.withRel("inventory-movements"));
 
         return entityModel;
     }
@@ -119,16 +128,22 @@ public class ProductService {
 
         Product updatedProduct = productRepository.save(productToUpdate.get());
         
+        MovementType movementType = MovementType.IN;
         //updating product's movement
-        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),quantity,updatedProduct);
+        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),quantity,movementType,updatedProduct);
         inventoryMovementRepository.save(inventoryMovement);
 
         return ResponseEntity.ok().body(updatedProduct);
     }
 
-/*
- * TODO
- * metodos para listar a movimentacao do produto
- */
+    public List<InventoryMovement> findAllInventoryMovements(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        
+        if(product.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+        System.out.println(product.get().getInventoryMovements());
+        return product.get().getInventoryMovements();
+    }
 
 }

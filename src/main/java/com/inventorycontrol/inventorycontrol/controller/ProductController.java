@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inventorycontrol.inventorycontrol.model.InventoryMovement;
 import com.inventorycontrol.inventorycontrol.model.Product;
+import com.inventorycontrol.inventorycontrol.repository.ProductRepository;
 import com.inventorycontrol.inventorycontrol.service.ProductService;
 
 @RestController
@@ -60,8 +62,14 @@ public class ProductController {
 
     //increasing inventory
     @PutMapping("/product/{id}/increase-stock/{quantity}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Product> increaseProductStock(@PathVariable(value = "id") Long id, @PathVariable(value = "quantity") int quantity){
         return productService.increaseProductStock(id,quantity);
     }
 
+    @GetMapping("/product/{id}/inventory-movement")
+    @ResponseStatus(HttpStatus.OK)
+    public List<InventoryMovement> findAllInventoryMovements (@PathVariable(value = "id") Long id){
+        return productService.findAllInventoryMovements(id);
+    }
 }

@@ -111,11 +111,17 @@ public class Product {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+    public List<InventoryMovement> getInventoryMovements() {
+        return inventoryMovements;
+    }
+    public void setInventoryMovements(List<InventoryMovement> inventoryMovements) {
+        this.inventoryMovements = inventoryMovements;
+    }    
+    
     @Override
     public String toString() {
         return "Product [name=" + name + ", description=" + description + ", brand=" + brand + ", maxQuantity="
                 + maxQuantity + ", minQuantity=" + minQuantity + ", quantity=" + quantity + ", weight=" + weight + "]";
     }
 
-    
 }
