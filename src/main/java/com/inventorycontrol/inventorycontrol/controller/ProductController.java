@@ -30,6 +30,7 @@ public class ProductController {
     }
     //save
     @PostMapping("/product")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Product> createProduct(@RequestBody Product product){
         return productService.createProduct(product);
     }
@@ -48,7 +49,7 @@ public class ProductController {
 
     //delete one
     @DeleteMapping("/product/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") Long id){
         return productService.deleteProduct(id);
     }
