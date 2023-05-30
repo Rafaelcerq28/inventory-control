@@ -31,7 +31,7 @@ public class Product {
     private long id;
 
     @Column(nullable = false)
-    @Size(min = 2)
+    @Size(min = 2,message = "name should have at least 2 characters")
     private String name;
     
     @Size(min = 5)

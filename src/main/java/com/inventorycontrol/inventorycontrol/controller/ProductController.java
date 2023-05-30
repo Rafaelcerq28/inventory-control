@@ -61,11 +61,23 @@ public class ProductController {
         return productService.updateProduct(product,id);
     }
 
+    //increasing inventory giving a description
+    @PutMapping("/product/{id}/increase-stock")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Product> increaseProductStock(@PathVariable(value = "id") Long id,@RequestBody InventoryMovement inventoryMovement){
+        return productService.increaseProductStock(id,inventoryMovement);
+    }
     //increasing inventory
     @PutMapping("/product/{id}/increase-stock/{quantity}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Product> increaseProductStock(@PathVariable(value = "id") Long id, @PathVariable(value = "quantity") int quantity){
         return productService.increaseProductStock(id,quantity);
+    }
+
+    @PutMapping("/product/{id}/decrease-stock")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Product> decreaseProductStock(@PathVariable(value = "id") Long id,@RequestBody InventoryMovement inventoryMovement){
+        return productService.decreaseProductStock(id,inventoryMovement);
     }
 
     @GetMapping("/product/{id}/inventory-movement")

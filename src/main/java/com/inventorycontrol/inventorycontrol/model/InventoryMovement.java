@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,20 +19,32 @@ public class InventoryMovement {
     public InventoryMovement() {
     }
     
+    public InventoryMovement(LocalDateTime dateTime, int quantity,MovementType movementType,String description, Product product) {
+        this.dateTime = dateTime;
+        this.quantity = quantity;
+        this.movementType = movementType;
+        this.description = description;
+        this.product = product;
+    }
+    //without description
     public InventoryMovement(LocalDateTime dateTime, int quantity,MovementType movementType, Product product) {
         this.dateTime = dateTime;
         this.quantity = quantity;
         this.movementType = movementType;
         this.product = product;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private LocalDateTime dateTime;
     
+    @Column(nullable = false)
     private int quantity;
     
+    private String description;
+
     private MovementType movementType;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -67,6 +80,14 @@ public class InventoryMovement {
     }
     public void setMovementType(MovementType movementType) {
         this.movementType = movementType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     

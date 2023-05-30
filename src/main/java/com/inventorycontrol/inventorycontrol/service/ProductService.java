@@ -42,7 +42,7 @@ public class ProductService {
 
         //When the product is created the system add the first inventory movement
         MovementType movementType = MovementType.IN;
-        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),savedProduct.getQuantity(),movementType,savedProduct);
+        InventoryMovement inventoryMovement = new InventoryMovement(LocalDateTime.now(),savedProduct.getQuantity(),movementType,"First Register",savedProduct);
         inventoryMovementRepository.save(inventoryMovement);
 
         return ResponseEntity.created(location).body(savedProduct);
@@ -117,6 +117,9 @@ public class ProductService {
         return ResponseEntity.ok().body(updatedProduct);
     }
 
+    /*
+     * METHOD TO INCREASE A PRODUCT AMOUNT IN STOCK, THIS METHOD DOESN'T GIVE AN OPTION TO PUT A DESCRIPTION 
+     */
     public ResponseEntity<Product> increaseProductStock(Long id, int quantity) {
         Optional<Product> productToUpdate = productRepository.findById(id);
 
@@ -136,6 +139,45 @@ public class ProductService {
         return ResponseEntity.ok().body(updatedProduct);
     }
 
+    //increase Product in Stock giving a description
+    public ResponseEntity<Product> increaseProductStock(Long id, InventoryMovement inventoryMovement) {
+        Optional<Product> productToUpdate = productRepository.findById(id);
+
+        if(productToUpdate.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+        
+        productToUpdate.get().setQuantity(productToUpdate.get().getQuantity() + inventoryMovement.getQuantity());
+
+        Product updatedProduct = productRepository.save(productToUpdate.get());
+        
+        MovementType movementType = MovementType.IN;
+        //updating product's movement
+        InventoryMovement inventoryMovementToSave = new InventoryMovement(LocalDateTime.now(),inventoryMovement.getQuantity(),movementType,inventoryMovement.getDescription(),updatedProduct);
+        inventoryMovementRepository.save(inventoryMovementToSave);
+
+        return ResponseEntity.ok().body(updatedProduct);
+    }
+
+    public ResponseEntity<Product> decreaseProductStock(Long id, InventoryMovement inventoryMovement) {
+        Optional<Product> productToUpdate = productRepository.findById(id);
+
+        if(productToUpdate.isPresent() == false){
+            throw new UserNotFoundException("id "+id);
+        }
+        
+        productToUpdate.get().setQuantity(productToUpdate.get().getQuantity() - Math.abs(inventoryMovement.getQuantity()));
+
+        Product updatedProduct = productRepository.save(productToUpdate.get());
+        
+        MovementType movementType = MovementType.OUT;
+        //updating product's movement                                                           //Turns into negative
+        InventoryMovement inventoryMovementToSave = new InventoryMovement(LocalDateTime.now(),(inventoryMovement.getQuantity() * -1),movementType,inventoryMovement.getDescription(),updatedProduct);
+        inventoryMovementRepository.save(inventoryMovementToSave);
+
+        return ResponseEntity.ok().body(updatedProduct);
+    }
+
     public List<InventoryMovement> findAllInventoryMovements(Long id) {
         Optional<Product> product = productRepository.findById(id);
         
@@ -145,5 +187,7 @@ public class ProductService {
         System.out.println(product.get().getInventoryMovements());
         return product.get().getInventoryMovements();
     }
+
+
 
 }
