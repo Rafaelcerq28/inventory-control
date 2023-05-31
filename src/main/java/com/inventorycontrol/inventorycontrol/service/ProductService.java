@@ -32,6 +32,10 @@ public class ProductService {
         this.inventoryMovementRepository = inventoryMovementRepository;
     }
 
+    /*
+     * Create a product with the first product's inventory movement and returnig the product's location
+     */
+
     public ResponseEntity<Product> createProduct(Product product){
         
         Product savedProduct = productRepository.save(product);
@@ -48,10 +52,16 @@ public class ProductService {
         return ResponseEntity.created(location).body(savedProduct);
     }
 
+    /*
+     * Get a list with all products
+     */
     public List<Product> findAllProducts(){
         return productRepository.findAll();
     }
 
+    /*
+     * Get one product by ID and return it with link to go back to all products and to go product's inventory movement
+     */
     public EntityModel<Product> findProduct(Long id){
         Optional<Product> product = productRepository.findById(id);
         
@@ -63,16 +73,16 @@ public class ProductService {
         EntityModel<Product> entityModel = EntityModel.of(product.get());
         WebMvcLinkBuilder link = linkTo(methodOn(ProductController.class).findAllProducts());
         entityModel.add(link.withRel("all-products"));
-        //Test
-        //WebMvcLinkBuilder link2 = linkTo(methodOn(ProductController.class).findProduct(id));
-        //entityModel.add(link2.withRel("one-product"));
-        //Test2
+    
         WebMvcLinkBuilder link2 = linkTo(methodOn(ProductController.class).findAllInventoryMovements(id));
         entityModel.add(link2.withRel("inventory-movements"));
 
         return entityModel;
     }
 
+    /*
+     * Delete one product
+     */
     public ResponseEntity<Object> deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
         
@@ -85,6 +95,9 @@ public class ProductService {
         return ResponseEntity.noContent().build();
     }
 
+    /*
+     * Update one product
+     */
     public ResponseEntity<Product> updateProduct(Product product, Long id) {
         Optional<Product> productToUpdate = productRepository.findById(id);
         
@@ -139,7 +152,9 @@ public class ProductService {
         return ResponseEntity.ok().body(updatedProduct);
     }
 
-    //increase Product in Stock giving a description
+    /*
+     * increase Product in Stock giving a description
+     */
     public ResponseEntity<Product> increaseProductStock(Long id, InventoryMovement inventoryMovement) {
         Optional<Product> productToUpdate = productRepository.findById(id);
 
@@ -158,7 +173,10 @@ public class ProductService {
 
         return ResponseEntity.ok().body(updatedProduct);
     }
-
+    
+    /*
+     * Decrease product amount in stock
+     */
     public ResponseEntity<Product> decreaseProductStock(Long id, InventoryMovement inventoryMovement) {
         Optional<Product> productToUpdate = productRepository.findById(id);
 
@@ -178,6 +196,9 @@ public class ProductService {
         return ResponseEntity.ok().body(updatedProduct);
     }
 
+    /*
+     * Finds all inventory's movement
+     */
     public List<InventoryMovement> findAllInventoryMovements(Long id) {
         Optional<Product> product = productRepository.findById(id);
         

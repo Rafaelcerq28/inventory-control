@@ -74,12 +74,14 @@ public class ProductController {
         return productService.increaseProductStock(id,quantity);
     }
 
+    //Decreasing inventory
     @PutMapping("/product/{id}/decrease-stock")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Product> decreaseProductStock(@PathVariable(value = "id") Long id,@RequestBody InventoryMovement inventoryMovement){
         return productService.decreaseProductStock(id,inventoryMovement);
     }
 
+    //Get a list with updates from the product
     @GetMapping("/product/{id}/inventory-movement")
     @ResponseStatus(HttpStatus.OK)
     public List<InventoryMovement> findAllInventoryMovements (@PathVariable(value = "id") Long id){

@@ -26,7 +26,7 @@ public class InventoryMovement {
         this.description = description;
         this.product = product;
     }
-    //without description
+    //Constructor without description
     public InventoryMovement(LocalDateTime dateTime, int quantity,MovementType movementType, Product product) {
         this.dateTime = dateTime;
         this.quantity = quantity;
