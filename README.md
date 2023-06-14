@@ -67,3 +67,7 @@ The API documentation can be accessed through Swagger at the following URL: `htt
 
 ## Contact
 If you have any questions or suggestions about this project, feel free to contact me at rafaelcerq28@gmail.com.
+
+# ToDo
+- criar um script.sql para subir alguns dados no banco quando inicializar o sistema
+- criar um urls.txt com os endpoints e as response structures
