@@ -2,22 +2,7 @@
 
 This is a Java project built with Spring Boot that implements a REST API for a product registration and inventory management system. The main objective of this project is to test and showcase skills in web application development using Spring Boot.
 
-The application utilizes the H2 database, however, users can also test the API by sending a POST request containing a JSON in the following format to the `http://localhost:8080/product` endpoint:
-<br>
-<br>
-
-```json
-{
-  "name": "Product Y",
-  "description": "This is a fantastic product",
-  "brand": "ABC Corporation",
-  "maxQuantity": 100,
-  "minQuantity": 10,
-  "quantity": 50,
-  "weight": 2.5
-}
-```
-
+The application utilizes the H2 database, however, everyone can test the API by sending a GET request to the `http://localhost:8080/product` endpoint because this project starts reading a data.sql file with some dummy data.
 
 ## Instalation
 This project was developed usin java 20 make sure you have the Java Development Kit (JDK) installed on your machine. You can check if the JDK is installed by running the following command in the terminal:
@@ -67,7 +52,3 @@ The API documentation can be accessed through Swagger at the following URL: `htt
 
 ## Contact
 If you have any questions or suggestions about this project, feel free to contact me at rafaelcerq28@gmail.com.
-
-# ToDo
-- criar um script.sql para subir alguns dados no banco quando inicializar o sistema
-- criar um urls.txt com os endpoints e as response structures
