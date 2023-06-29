@@ -51,4 +51,4 @@ The API has the following main endpoints:
 The API documentation can be accessed through Swagger at the following URL: `http://localhost:8080/swagger-ui.html`.
 
 ## Contact
-If you have any questions or suggestions about this project, feel free to contact me at rafaelcerq28@gmail.com.
+If you have any questions or suggestions about this project, feel free to contact me at rafaelcerq28@gmail.com
